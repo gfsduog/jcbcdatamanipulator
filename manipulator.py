@@ -1,7 +1,7 @@
 from pandas import read_excel
 from argparse import ArgumentParser
 from math import isnan
-from os import mkdir
+from os import makedirs
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
     parser.add_argument('file')
     in_name = parser.parse_args().file
     dir_name = in_name[:in_name.index('.')]
-    mkdir(dir_name)
+    makedirs(dir_name, exist_ok=True)
     for sample_id, sheet in read_excel(in_name, None).items():
         with open(f'{dir_name}/{sample_id}.csv', 'w') as f:
             f.write(

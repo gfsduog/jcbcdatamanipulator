@@ -9,28 +9,22 @@ def main():
     parser.add_argument('file')
     parser = parser.parse_args()
     in_name = parser.file
-    dir_name = in_name[:in_name.index('.')]
+    index = in_name.find('.')
+    if index == -1:
+        print('No "." found in file name, did you pass in a directory?')
+        return
+    dir_name = in_name[:index]
     makedirs(dir_name, exist_ok=True)
-    with open('all.csv', 'w') as alldatacsv:
+    with open(f'{dir_name}/all.csv', 'w') as alldatacsv:
         for sample_id, sheet in read_excel(in_name, None).items():
-            # print(sample_id)
-            # if '650' in sample_id:
-            #     print('skipping 650 run')
-            #     continue
-            # if 'alpha' in sample_id:
-            #     print('skipping alpha run')
-            #     continue
-            #     stimulus = 'alpha'
-            # elif 'omega' in sample_id:
-            #     stimulus = 'omega'
-            # else:
-            #     stimulus = 'unknown'
-            #     print(f'Unknown stimulus for sheet {sample_id}')
+            if sample_id.lower() in ('plate layouts', 'table'):
+                print('skipping ', sample_id)
+                continue
             with open(f'{dir_name}/{sample_id}.csv', 'w') as f:
                 f.write(
                     'date,plate,well,serum_percent,stimulus,SAMPLE_ID,absorbance_620,stimulus,Read time\n')
                 read_date = sheet.iloc[5, 0][6:]
-                print(read_date)
+                print(sample_id, read_date)
                 read_time = sheet.iloc[6, 0][6:]
                 data = []
                 for i, row in sheet.iterrows():

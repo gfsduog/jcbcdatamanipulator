@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pandas import read_excel
 from argparse import ArgumentParser
 from math import isnan
@@ -17,7 +18,7 @@ def main():
     makedirs(dir_name, exist_ok=True)
     with open(f'{dir_name}/all.csv', 'w') as alldatacsv:
         for sample_id, sheet in read_excel(in_name, None).items():
-            if sample_id.lower() in ('plate layouts', 'table'):
+            if sample_id.lower() in ('plate layouts', 'platelayouts', 'table'):
                 print('skipping ', sample_id)
                 continue
             with open(f'{dir_name}/{sample_id}.csv', 'w') as f:

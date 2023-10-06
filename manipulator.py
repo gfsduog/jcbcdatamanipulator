@@ -21,24 +21,21 @@ def main():
             if sample_id.lower() in ('plate layouts', 'platelayouts', 'table'):
                 print('skipping ', sample_id)
                 continue
-            with open(f'{dir_name}/{sample_id}.csv', 'w') as f:
-                f.write(
-                    'date,plate,well,serum_percent,stimulus,SAMPLE_ID,absorbance_620,stimulus,Read time\n')
-                read_date = sheet.iloc[5, 0][6:]
-                print(sample_id, read_date)
-                read_time = sheet.iloc[6, 0][6:]
-                data = []
-                for i, row in sheet.iterrows():
-                    if not (isnan(row[-1]) or row[0] != row[0]):
-                        row_letter = None
-                        for i, cell in enumerate(row):
-                            if row_letter:
-                                data.append(
-                                    f'{row_letter}{i},{sample_id},{read_time},{read_date},{cell}\n')
-                            else:
-                                row_letter = cell
-                for i in range(96):
-                    alldatacsv.write(data[(i % 8) * 12 + (i // 8)])
+            read_date = sheet.iloc[5, 0][6:]
+            print(sample_id, read_date)
+            read_time = sheet.iloc[6, 0][6:]
+            data = []
+            for i, row in sheet.iterrows():
+                if not (isnan(row[-1]) or row[0] != row[0]):
+                    row_letter = None
+                    for i, cell in enumerate(row):
+                        if row_letter:
+                            data.append(
+                                f'{row_letter}{i},{sample_id},{read_time},{read_date},{cell}\n')
+                        else:
+                            row_letter = cell
+            for i in range(96):
+                alldatacsv.write(data[(i % 8) * 12 + (i // 8)])
 
 
 if __name__ == '__main__':
